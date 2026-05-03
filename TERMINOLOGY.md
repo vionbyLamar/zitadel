@@ -1,5 +1,5 @@
 # ZITADEL Canonical Terminology
-
+2
 Authoritative naming reference derived from [issue #5888](https://github.com/zitadel/zitadel/issues/5888).
 All user-facing wording in docs, UI, and API descriptions must follow this table.
 
