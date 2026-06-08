@@ -1,0 +1,401 @@
+My verdict:
+
+```text
+Seed concept: good
+YAML syntax: valid
+Org/project/app structure: mostly coherent
+Authority membrane doctrine: preserved
+ZITADEL apply readiness: no
+App wiring readiness: definitely no
+```
+
+The important thing: Gemini did **not** collapse this into app-local login. The files keep the correct split:
+
+```text
+ZITADEL = orgs / projects / apps / roles / claims / grants
+Relationship grants = platform authority/membrane concern
+Apps = later consumers
+```
+
+That part is right.
+
+## Main blockers before applying
+
+### 1. Role mismatch in Allinq grant
+
+In `06-project-grants.yaml`, Allinq receives:
+
+```yaml
+- squados.requestor
+```
+
+But `05-role-taxonomy.yaml` does **not** define `squados.requestor`. It defines:
+
+```yaml
+- squados.buyer.requestor
+```
+
+and also has:
+
+```yaml
+- squados.workblock.request
+```
+
+This is a real blocker.
+
+Because Allinq is not simply a buyer, I would **not** blindly change it to `squados.buyer.requestor`.
+
+I’d add a proper cross-org/requester role:
+
+```yaml
+- key: squados.requester
+```
+
+or better:
+
+```yaml
+- key: squados.relationship.requester
+```
+
+Then keep:
+
+```yaml
+- squados.workblock.request
+```
+
+for the actual action permission.
+
+### 2. User grant examples exceed project grants
+
+In `09-user-grants.example.yaml`, Mark from Allinq gets:
+
+```yaml
+- squados.evidence.submit
+```
+
+But Allinq’s project grant in `06-project-grants.yaml` only includes:
+
+```yaml
+- squados.evidence.view
+```
+
+So Mark cannot receive `squados.evidence.submit` unless Allinq is granted that role first.
+
+Same issue for Jane from KPN. She gets:
+
+```yaml
+- squados.workblock.assign
+- squados.workblock.reassign
+```
+
+but KPN’s project grant does not include those roles.
+
+Either grant those roles to KPN/Allinq, or remove them from the user-grant examples.
+
+For your model, I think the better correction is:
+
+```text
+KPN MSP manager should probably get assign/reassign.
+Allinq technician should probably get evidence.submit only if Allinq is allowed to execute/provide, not merely request.
+```
+
+### 3. Flat role list is not yet “groups and subgroups”
+
+`05-role-taxonomy.yaml` has a good flat role list, but not the grouped/subgrouped authority model we actually need.
+
+Right now it is:
+
+```yaml
+projects:
+  - id: project-squados
+    roles:
+      - key: squados.buyer.admin
+      - key: squados.buyer.manager
+```
+
+It should evolve toward:
+
+```yaml
+roleGroups:
+  - key: buyer
+    roles:
+      - squados.buyer.admin
+      - squados.buyer.manager
+      - squados.buyer.requestor
+
+  - key: msp
+    roles:
+      - squados.msp.manager
+      - squados.msp.operator
+
+  - key: technician
+    roles:
+      - squados.technician.l0
+      - squados.technician.l1
+      - squados.technician.l2
+
+  - key: relationship
+    roles:
+      - squados.relationship.requester
+      - squados.relationship.shared_status_viewer
+```
+
+The grouping matters because later the page rules and authority membrane should consume role families, not only long flat strings.
+
+### 4. `isVerified: true` is unsafe in org-domain seeds
+
+`02-org-domains.yaml` marks all resolver domains as verified:
+
+```yaml
+isVerified: true
+```
+
+For seed/review files, I’d make these:
+
+```yaml
+verificationState: pending
+isVerified: false
+```
+
+or:
+
+```yaml
+isVerified: "{{ resolved_by_apply_script }}"
+```
+
+Especially for:
+
+```text
+auth.kpn.squadit.eu
+auth.allinq.squadit.eu
+```
+
+Even if Squad IT controls the DNS, the seed should not pretend verification has already happened.
+
+### 5. Global domain policy may block guest/site-contact realities
+
+`00-instance-policy.example.yaml` has:
+
+```yaml
+userLoginMustBeDomain: true
+```
+
+That is good for controlled workforce/org users, but risky globally because the platform also has:
+
+```text
+site-contact
+operator-guest
+buyer guest
+non-claimed account
+portal preview
+```
+
+Those actors may not authenticate with an email domain matching the organization.
+
+So this should become either:
+
+```text
+strict policy for organization workforce auth
+separate relaxed policy for portal/guest preview flows
+```
+
+or it needs explicit exceptions.
+
+Otherwise we accidentally kill the very external-actor model we designed.
+
+### 6. Custom claim action is too fragile
+
+`08-actions-custom-claims.yaml` currently derives facets from org name:
+
+```js
+if (ctx.v1.org.name.includes("Squad IT")) {
+   facets.push("squadit-platform");
+}
+```
+
+That is too weak.
+
+Facets should come from explicit org metadata or the seed registry, not string matching on the display name.
+
+Also this line:
+
+```js
+api.v1.claims.setClaim("squadauth:organization_code", ctx.v1.org.id);
+```
+
+sets the ZITADEL org id, not necessarily your logical org code like:
+
+```text
+org-NL-A001
+```
+
+We need both:
+
+```text
+zitadel_org_id
+squadauth_org_code
+```
+
+Do not overload one as the other.
+
+### 7. Service account scopes are too broad / contradictory
+
+`svc-squad-auth-config-export` says:
+
+```yaml
+auditNote: "Read-only access to config"
+```
+
+but has roles:
+
+```yaml
+- authadmin.project.manage
+- authadmin.role.taxonomy.manage
+```
+
+That is not read-only.
+
+Either create read-only roles:
+
+```yaml
+authadmin.project.read
+authadmin.role.taxonomy.read
+authadmin.grant.read
+```
+
+or change the audit note.
+
+Same with `svc-policy-snapshot-worker`: it has `controlplane.policy.publish`. A worker should probably prepare/snapshot/draft; publishing policy should require a human/platform authority path unless this is intentionally automated and tightly audited.
+
+## What is good
+
+The project separation is strong:
+
+```text
+squadOS
+control-plane
+squad-auth-admin
+sense
+developer-console
+portal
+agent-runtime
+```
+
+That matches the architecture.
+
+The relationship grants file is also correctly separated from ZITADEL-native grants. That is critical. Relationship grants like Allinq → KPN belong to the Authority Membrane, not pure ZITADEL role assignment.
+
+This aligns with the existing repo direction: the platform already has activation flags for `authorityMembrane.enabled`, `runtimeUpperLayer.enabled`, `consumerValidation.enabled`, and UI panels for action envelopes and blocked-action explanations.  
+
+The service-account idea for agent runtime is also correctly bounded. `svc-workblock-agent-runtime` has read/summarize/draft roles, not execution authority. That preserves the “agent proposes, membrane/authority decides” rule.
+
+## Missing from the uploaded set
+
+I only see the twelve seed YAML files. For the full pass, Gemini still needs to provide or update:
+
+```text
+SQUAD_AUTH_ZITADEL_IMPLEMENTATION.md
+ZITADEL_RESOURCE_MAP.md
+AUTHORITY_MEMBRANE_INTEGRATION.md
+REVIEW_BEFORE_WIRING.md
+validate-seed.ts
+check-env.sh
+export-zitadel-config.sh
+diff-zitadel-config.sh
+apply-zitadel-seed.dry-run.sh
+squad-auth-claims.ts
+squad-auth-authority.ts
+```
+
+Without those, this is a good **seed draft**, not the full implementation layer.
+
+## My recommendation
+
+Do **not** apply to ZITADEL yet.
+
+Do one fix pass first:
+
+```text
+1. Fix role mismatches.
+2. Add role groups/subgroups.
+3. Separate ZITADEL org id from Squad Auth org code.
+4. Make domain verification state pending/reviewed, not true.
+5. Split strict workforce domain policy from guest/portal flows.
+6. Make service account roles match their audit notes.
+7. Expand policy snapshots beyond two demo rules.
+8. Add validate-seed.ts and run it before any real apply.
+```
+
+## Prompt to give Gemini next
+
+```md
+Review and repair the ZITADEL seed layer. Do not wire apps and do not apply anything to ZITADEL.
+
+Files to inspect:
+infra/zitadel/squad-auth/seed/*.yaml
+
+Main corrections required:
+
+1. Fix cross-file role mismatches:
+   - `squados.requestor` is granted but not defined.
+   - Decide whether to add `squados.relationship.requester` / `squados.requester` or rename the grant.
+   - Do not blindly change Allinq requester into buyer requester unless justified.
+
+2. Ensure all user grant examples are valid under their org project grants:
+   - Mark/Allinq currently receives `squados.evidence.submit`, but Allinq is not granted that role.
+   - Jane/KPN receives `squados.workblock.assign` and `squados.workblock.reassign`, but KPN is not granted those roles.
+   - Either update project grants or update the user examples.
+
+3. Convert the flat role taxonomy into grouped role families:
+   - buyer
+   - msp
+   - provider
+   - technician
+   - operator
+   - site-contact
+   - operator-guest
+   - relationship
+   - workblock
+   - evidence
+   - settlement
+   - sense
+   - control-plane
+   - developer
+   - agent-runtime
+
+4. Do not mark resolver domains as verified by default.
+   Replace `isVerified: true` with explicit pending/review states unless a verification source is provided.
+
+5. Separate ZITADEL internal org IDs from Squad Auth logical org codes.
+   The custom claim should emit both:
+   - `squadauth:zitadel_org_id`
+   - `squadauth:organization_code`
+
+6. Do not derive organization facets by string-matching org names.
+   Facets must come from explicit org metadata/seed config.
+
+7. Review instance domain policy.
+   `userLoginMustBeDomain: true` may be valid for workforce users but must not block site-contact, operator-guest, buyer-guest, or workblock-preview flows.
+
+8. Review service accounts:
+   - Make read-only workers actually read-only.
+   - Do not give publish/manage authority where the audit note says export/read-only.
+   - Policy publish should require explicit human/platform authority unless intentionally automated and documented.
+
+9. Expand policy snapshots:
+   Include policy version, effective dates, namespace, role groups, relationship-grant references, workblock action classes, blocked reason mappings, and resolution path references.
+
+10. Create or update:
+   - validate-seed.ts
+   - ZITADEL_RESOURCE_MAP.md
+   - AUTHORITY_MEMBRANE_INTEGRATION.md
+   - REVIEW_BEFORE_WIRING.md
+
+Final output:
+- files changed
+- validation results
+- remaining blockers
+- explicit statement that no app wiring was performed
+```
+
+Bottom line: **this is a good first seed draft. It proves Gemini understood the architecture. It just needs one hardening pass before we let it anywhere near real ZITADEL state.**

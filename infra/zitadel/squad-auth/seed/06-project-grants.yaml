@@ -1,0 +1,33 @@
+# 06-project-grants.yaml
+# Project grants across organizations
+
+projectGrants:
+  - sourceProjectId: project-squados
+    sourceOrgId: org-NL-A001
+    targetOrgId: org-NL-A101 # KPN
+    grantedRoles:
+      - squados.msp.manager
+      - squados.msp.operator
+      - squados.technician.l2
+      - squados.technician.dispatchable
+      - squados.workblock.read
+      - squados.workblock.accept
+      - squados.workblock.execute
+      - squados.workblock.assign
+      - squados.workblock.reassign
+      - squados.evidence.submit
+      - squados.evidence.view
+
+  - sourceProjectId: project-squados
+    sourceOrgId: org-NL-A001
+    targetOrgId: org-NL-A102 # Allinq
+    grantedRoles:
+      - squados.provider.manager
+      - squados.provider.operator
+      - squados.relationship.requester
+      - squados.technician.l2
+      - squados.workblock.request
+      - squados.workblock.read
+      - squados.workblock.execute
+      - squados.evidence.submit
+      - squados.evidence.view

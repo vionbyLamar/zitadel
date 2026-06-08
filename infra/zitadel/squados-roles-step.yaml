@@ -1,0 +1,19 @@
+- name: Create SquadOS Roles
+  projectId: "376412836206870531"
+  steps:
+    - type: project.role.create
+      args:
+        key: platform_admin
+        displayName: Platform Administrator
+    - type: project.role.create
+      args:
+        key: msp_admin
+        displayName: MSP Administrator
+    - type: project.role.create
+      args:
+        key: operative
+        displayName: Field Operative
+    - type: project.role.create
+      args:
+        key: buyer_admin
+        displayName: Buyer Administrator

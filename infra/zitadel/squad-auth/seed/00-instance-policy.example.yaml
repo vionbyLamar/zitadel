@@ -1,0 +1,37 @@
+# 00-instance-policy.example.yaml
+# EXAMPLE: Global instance policy for ZITADEL
+# Do not apply directly without review.
+
+name: squadit-instance-policy
+description: Base policy for the Squad Auth instance
+
+# Strict policy for internal organization workforce
+workforcePolicy:
+  loginPolicy:
+    allowUsernamePassword: false
+    allowRegister: false
+    allowExternalIdp: true
+    forceMFA: true
+  passwordComplexityPolicy:
+    minLength: 12
+    hasUppercase: true
+    hasLowercase: true
+    hasNumber: true
+    hasSymbol: true
+  domainPolicy:
+    userLoginMustBeDomain: true
+    validateOrgDomains: true
+    smtpsenderAddressMatchesInstanceDomain: true
+
+# Relaxed policy for external actors (guests, site-contacts, portal preview)
+guestPortalPolicy:
+  loginPolicy:
+    allowUsernamePassword: true
+    allowRegister: true
+    allowExternalIdp: true
+    forceMFA: false
+  passwordComplexityPolicy:
+    minLength: 8
+  domainPolicy:
+    userLoginMustBeDomain: false
+    validateOrgDomains: false

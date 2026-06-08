@@ -1,0 +1,29 @@
+# 11-policy-snapshots.example.yaml
+# EXAMPLE: Immutable policy references for the Authority Membrane
+
+policySnapshots:
+  - id: policy_snap_2026_06_07_A
+    version: "v1.2.0"
+    effectiveDates:
+      start: "2026-06-07T00:00:00Z"
+      end: null
+    namespace: "squados.dispatch.standard"
+    description: "Standard dispatch policy for Q2"
+    roleGroupsAffected:
+      - technician
+      - msp
+    relationshipGrantReferences:
+      - may_send_workblocks_to
+      - may_request_acceptance_from
+    workblockActionClasses:
+      - DISPATCH
+      - EVIDENCE_SUBMISSION
+      - RESOLUTION
+    rules:
+      require_named_technician_approval: true
+      allow_auto_graduation_on_l1: false
+    blockedReasonMappings:
+      - code: actor_not_active_in_org
+        resolutionPathRef: "res_path_reassign_active_work"
+      - code: missing_relationship_grant
+        resolutionPathRef: "res_path_request_platform_mediation"

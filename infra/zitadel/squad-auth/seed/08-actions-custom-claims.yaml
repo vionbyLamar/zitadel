@@ -1,0 +1,30 @@
+# 08-actions-custom-claims.yaml
+# ZITADEL Actions script definitions for injecting custom claims
+
+actions:
+  - id: action-inject-squad-claims
+    name: Inject SquadAuth Claims
+    trigger: pre-access-token-creation
+    script: |
+      /**
+       * Injects squad-specific custom claims into the token.
+       * NOTE: Do not place complex business logic here. Emit facts, let Authority Membrane decide.
+       */
+      function injectSquadClaims(ctx, api) {
+        // Prefer User Metadata (for local demo simulation), fallback to Org Metadata
+        let userMetadata = ctx.v1.user.metadata || {};
+        let orgMetadata = ctx.v1.org.metadata || {};
+        
+        let squadAuthOrgCode = userMetadata["squadauth:logical_code"] || orgMetadata["squadauth:logical_code"] || ctx.v1.org.id;
+        
+        let facetsStr = userMetadata["squadauth:facets"] || orgMetadata["squadauth:facets"] || "";
+        let facets = facetsStr ? facetsStr.split(",") : [];
+        
+        // Emit explicit IDs to differentiate internal ZITADEL IDs from logical platform codes
+        api.v1.claims.setClaim("squadauth:zitadel_org_id", ctx.v1.org.id);
+        api.v1.claims.setClaim("squadauth:organization_code", squadAuthOrgCode);
+        api.v1.claims.setClaim("squadauth:organization_facets", facets);
+        
+        // Expose the resolver domain used during auth
+        api.v1.claims.setClaim("squadauth:resolver_context", ctx.v1.request.host);
+      }

@@ -1,0 +1,62 @@
+# 04-applications.yaml
+# Applications mapping to projects
+
+applications:
+  - projectId: project-squados
+    apps:
+      - name: squados-web
+        type: OIDC_APP_TYPE_USER_AGENT
+      - name: squados-mobile
+        type: OIDC_APP_TYPE_NATIVE
+      - name: squados-api
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+
+  - projectId: project-control-plane
+    apps:
+      - name: control-plane-web
+        type: OIDC_APP_TYPE_USER_AGENT
+      - name: control-plane-api
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+
+  - projectId: project-auth-admin
+    apps:
+      - name: squad-auth-admin-web
+        type: OIDC_APP_TYPE_USER_AGENT
+      - name: squad-auth-admin-api
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+
+  - projectId: project-sense
+    apps:
+      - name: sense-web
+        type: OIDC_APP_TYPE_USER_AGENT
+      - name: sense-api
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+      - name: sense-ingest
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+
+  - projectId: project-dev-console
+    apps:
+      - name: dev-console-web
+        type: OIDC_APP_TYPE_USER_AGENT
+      - name: dev-console-api
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+
+  - projectId: project-portal
+    apps:
+      - name: portal-web
+        type: OIDC_APP_TYPE_USER_AGENT
+      - name: portal-api
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+
+  - projectId: project-agent-runtime
+    apps:
+      - name: agent-runtime-api
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+      - name: workblock-agent-client
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+      - name: sense-agent-client
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+      - name: notification-worker-client
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT
+      - name: projection-worker-client
+        type: API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT

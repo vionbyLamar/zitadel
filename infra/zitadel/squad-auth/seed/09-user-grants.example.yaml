@@ -1,0 +1,22 @@
+# 09-user-grants.example.yaml
+# EXAMPLE: User grants for testing the taxonomy
+# Do not commit real user emails or personal info here.
+
+userGrants:
+  - userId: user-mark-allinq-example
+    orgId: org-NL-A102 # Allinq
+    projectId: project-squados
+    roles:
+      - squados.technician.l2
+      - squados.workblock.read
+      - squados.workblock.execute
+      - squados.evidence.submit
+
+  - userId: user-jane-kpn-example
+    orgId: org-NL-A101 # KPN
+    projectId: project-squados
+    roles:
+      - squados.msp.manager
+      - squados.workblock.assign
+      - squados.workblock.reassign
+      - squados.workblock.accept

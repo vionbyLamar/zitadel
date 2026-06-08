@@ -14,8 +14,17 @@
 }
 
 html {
-  --background-color: #ffffff;
-  --dark-background-color: #000000;
+  --background-color: #f7f6f3;
+  --dark-background-color: #1a2535;
+  
+  /* SquadOS Primary Color Overrides */
+  --theme-light-primary-500: #2a5a8f;
+  --theme-light-primary-600: #1f4269;
+  --theme-light-primary-contrast-500: #ffffff;
+  
+  --theme-dark-primary-500: #2a5a8f;
+  --theme-dark-primary-600: #1f4269;
+  --theme-dark-primary-contrast-500: #ffffff;
 }
 
 .form-checkbox:checked {

@@ -1,0 +1,29 @@
+# 01-organizations.yaml
+# Seed organizations for the platform
+
+organizations:
+  - id: org-NL-A001
+    name: Squad IT
+    machineName: squadit
+    purpose: Platform owner / bootstrap / governance origin
+    metadata:
+      squadauth_org_code: org-NL-A001
+      squadauth_facets: squadit-platform,squadit-company,auth-governance-owner,platform-operator-home,developer-home
+
+  - id: org-NL-A101
+    name: KPN Example
+    exampleOnly: true # DO NOT USE FOR REAL CUSTOMER DATA
+    machineName: kpn
+    purpose: Example MSP / technical organization
+    metadata:
+      squadauth_org_code: org-NL-A101
+      squadauth_facets: msp,technician_pool,service_provider
+
+  - id: org-NL-A102
+    name: Allinq Example
+    exampleOnly: true # DO NOT USE FOR REAL CUSTOMER DATA
+    machineName: allinq
+    purpose: Example service provider / requester / technician organization
+    metadata:
+      squadauth_org_code: org-NL-A102
+      squadauth_facets: service_provider,requester,technician_pool

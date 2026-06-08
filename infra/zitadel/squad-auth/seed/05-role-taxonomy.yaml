@@ -1,0 +1,156 @@
+# 05-role-taxonomy.yaml
+# Functional roles per project, grouped into families for Authority Membrane consumption.
+
+projects:
+  - id: project-squados
+    roleGroups:
+      - key: buyer
+        roles:
+          - squados.buyer.admin
+          - squados.buyer.manager
+          - squados.buyer.requestor
+      - key: msp
+        roles:
+          - squados.msp.manager
+          - squados.msp.operator
+      - key: provider
+        roles:
+          - squados.provider.manager
+          - squados.provider.operator
+      - key: technician
+        roles:
+          - squados.technician.l0
+          - squados.technician.l1
+          - squados.technician.l2
+          - squados.technician.dispatchable
+          - squados.technician.evidence_submitter
+      - key: operator
+        roles:
+          - squados.operator.support
+          - squados.operator.provisioning
+          - squados.operator.access_review
+          - squados.operator.workblock_exception
+          - squados.operator.evidence_triage
+          - squados.operator.dispatch_mediation
+      - key: site-contact
+        roles:
+          - squados.site_contact.confirm
+          - squados.site_contact.access_note
+      - key: operator-guest
+        roles:
+          - squados.operator_guest.viewer
+          - squados.operator_guest.action_viewer
+      - key: relationship
+        roles:
+          - squados.relationship.requester
+          - squados.relationship.shared_status_viewer
+      - key: workblock
+        roles:
+          - squados.workblock.read
+          - squados.workblock.request
+          - squados.workblock.assign
+          - squados.workblock.reassign
+          - squados.workblock.accept
+          - squados.workblock.execute
+          - squados.workblock.block
+          - squados.workblock.resolve
+      - key: evidence
+        roles:
+          - squados.evidence.view
+          - squados.evidence.submit
+          - squados.evidence.review
+          - squados.evidence.accept
+          - squados.evidence.reject
+      - key: settlement
+        roles:
+          - squados.settlement.view_buyer
+          - squados.settlement.view_msp
+          - squados.settlement.view_operative
+          - squados.settlement.review
+
+  - id: project-control-plane
+    roleGroups:
+      - key: control-plane
+        roles:
+          - controlplane.tenant.provision
+          - controlplane.application.grant
+          - controlplane.auth.configure
+          - controlplane.role.assign
+          - controlplane.policy.draft
+          - controlplane.policy.publish
+          - controlplane.audit.review
+          - controlplane.breakglass.manage
+          - controlplane.production.override
+          - controlplane.resolver_domain.manage
+
+  - id: project-auth-admin
+    roleGroups:
+      - key: auth-admin
+        roles:
+          - authadmin.org.create
+          - authadmin.org.domain.manage
+          - authadmin.project.manage
+          - authadmin.project.read
+          - authadmin.project.grant
+          - authadmin.grant.read
+          - authadmin.role.taxonomy.manage
+          - authadmin.role.taxonomy.read
+          - authadmin.claims.configure
+          - authadmin.actions.manage
+          - authadmin.service_account.manage
+          - authadmin.policy.snapshot.publish
+          - authadmin.impersonation.configure
+          - authadmin.breakglass.configure
+
+  - id: project-sense
+    roleGroups:
+      - key: sense
+        roles:
+          - sense.admin
+          - sense.manager
+          - sense.engineer
+          - sense.signal.ingest
+          - sense.signal.route
+          - sense.signal.review
+          - sense.graduation.request
+          - sense.graduation.approve
+
+  - id: project-dev-console
+    roleGroups:
+      - key: developer
+        roles:
+          - dev.repo.read
+          - dev.preview.deploy
+          - dev.staging.deploy
+          - dev.production.release_request
+          - dev.logs.read
+          - dev.migration.prepare
+          - dev.migration.execute_staging
+          - dev.feature_flags.stage
+          - dev.feature_flags.publish_request
+          - dev.secrets.rotation_request
+
+  - id: project-portal
+    roleGroups:
+      - key: portal
+        roles:
+          - portal.guest.viewer
+          - portal.guest.action_viewer
+          - portal.site_contact.confirm
+          - portal.buyer_guest.viewer
+          - portal.non_claimed_account.viewer
+          - portal.workblock_preview.view
+          - portal.workblock_preview.action
+
+  - id: project-agent-runtime
+    roleGroups:
+      - key: agent-runtime
+        roles:
+          - agent.workblock.read
+          - agent.workblock.summarize
+          - agent.evidence.summarize
+          - agent.recommendation.draft
+          - agent.signal.classify
+          - agent.notification.prepare
+          - agent.projection.refresh
+          - agent.audit.emit

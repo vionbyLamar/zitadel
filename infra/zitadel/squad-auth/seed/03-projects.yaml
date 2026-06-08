@@ -1,0 +1,45 @@
+# 03-projects.yaml
+# Core platform projects (owned by org-NL-A001)
+
+projects:
+  - id: project-squados
+    name: squadOS
+    orgId: org-NL-A001
+    projectRoleAssertion: true
+    projectRoleCheck: true
+    
+  - id: project-control-plane
+    name: squadit-control-plane
+    orgId: org-NL-A001
+    projectRoleAssertion: true
+    projectRoleCheck: true
+
+  - id: project-auth-admin
+    name: squad-auth-admin
+    orgId: org-NL-A001
+    projectRoleAssertion: true
+    projectRoleCheck: true
+
+  - id: project-sense
+    name: sense
+    orgId: org-NL-A001
+    projectRoleAssertion: true
+    projectRoleCheck: true
+
+  - id: project-dev-console
+    name: developer-console
+    orgId: org-NL-A001
+    projectRoleAssertion: true
+    projectRoleCheck: true
+
+  - id: project-portal
+    name: portal
+    orgId: org-NL-A001
+    projectRoleAssertion: true
+    projectRoleCheck: true
+
+  - id: project-agent-runtime
+    name: agent-runtime
+    orgId: org-NL-A001
+    projectRoleAssertion: true
+    projectRoleCheck: true

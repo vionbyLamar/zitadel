@@ -1,0 +1,21 @@
+# 02-org-domains.yaml
+# Resolver domains for organizations
+
+domains:
+  - orgId: org-NL-A001
+    domain: auth.squadit.eu
+    isPrimary: true
+    isVerified: "{{ resolved_by_apply_script }}"
+    verificationState: pending
+    
+  - orgId: org-NL-A101
+    domain: auth.kpn.squadit.eu
+    isPrimary: true
+    isVerified: false
+    verificationState: pending
+
+  - orgId: org-NL-A102
+    domain: auth.allinq.squadit.eu
+    isPrimary: true
+    isVerified: false
+    verificationState: pending

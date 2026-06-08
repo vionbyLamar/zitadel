@@ -1,0 +1,17 @@
+# 10-relationship-grants.example.yaml
+# EXAMPLE: Squad IT Platform Relationship Grants
+# These are evaluated by the Authority Membrane, NOT natively by ZITADEL.
+# Included here to show the full auth taxonomy in context.
+
+relationshipGrants:
+  - sourceOrgId: org-NL-A102 # Allinq
+    targetOrgId: org-NL-A101 # KPN
+    grants:
+      - may_send_workblocks_to
+      - may_request_acceptance_from
+      - may_view_shared_workblock_status
+    scopes:
+      service_scope: network_field_services
+      region_scope: NL
+      evidence_scope: shared_workblock_only
+      settlement_scope: shared_projection_only
